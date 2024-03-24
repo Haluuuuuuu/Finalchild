@@ -30,19 +30,19 @@ def make_predictions(model, years):
     return model.predict([[year] for year in years])
 
 # Load data and train model for world child mortality rate
-file_path_world = 'data_processing/scripts/world-medium.csv'
+file_path_world = 'world-medium.csv'
 df_world, lr_model_world, mse_world, r2_world = load_data_and_train_model(file_path_world)
 
 # Read the data from the CSV file for countries
-file_path_country = 'data_processing/scripts/country-medium.csv'
+file_path_country = 'country-medium.csv'
 df_country = pd.read_csv(file_path_country, encoding='latin1')
 
 # Read the data from the CSV file for regions
-file_path_region = 'data_processing/scripts/Regionss-medium.csv'
+file_path_region = 'Regionss-medium.csv'
 df_region = pd.read_csv(file_path_region, encoding='latin1')
 
 # Read the data from the CSV file for sustainable development goals
-file_path_sdg = 'data_processing/scripts/SDG-medium.csv'
+file_path_sdg = 'SDG-medium.csv'
 df_sdg = pd.read_csv(file_path_sdg)
 
 # Streamlit app
@@ -102,18 +102,19 @@ def main():
                     st.write(f"Predicted Mortality Rate for {selected_country} in {selected_year_country}: {mortality_prediction_country}")
             except ValueError:
                 st.warning("Please enter a valid year.")
+
     elif selected_data_option == 'By Region':
-    # User input for region and year
+        # User input for region and year
         selected_region = st.selectbox("Select Region", df_region['Region.Name'].unique())
         selected_year_region = st.text_input("Enter Year (e.g., 2023.5):")
 
         if st.button("Predict child mortality"):
             try:
-                 selected_year_region = float(selected_year_region)
-                 if selected_year_region < 2021.5 or selected_year_region > 2041.5:
+                selected_year_region = float(selected_year_region)
+                if selected_year_region < 2021.5 or selected_year_region > 2041.5:
                     st.error("Year is out of range. Please select a year between 2021.5 and 2041.5.")
-                 else:
-                # Get the predicted mortality rate for the selected region and year
+                else:
+                    # Get the predicted mortality rate for the selected region and year
                     base_year = 2021.5
                     region_data = df_region[df_region['Region.Name'] == selected_region]
                     mortality_prediction_base = region_data[str(base_year)].values[0]
@@ -124,23 +125,26 @@ def main():
                 st.warning("Please enter a valid year.")
 
     elif selected_data_option == 'By Sustainable Development Goal':
-    # User input for region and year
-       selected_region = st.selectbox("Select Region", df_sdg['Region.Name'].unique())
-       selected_year_region = st.text_input("Enter Year (e.g., 2023.5):")
+        # User input for region and year
+        selected_region = st.selectbox("Select Region", df_sdg['Region.Name'].unique())
+        selected_year_region = st.text_input("Enter Year (e.g., 2023.5):")
 
-    if st.button("Predict child mortality"):
-        try:
-            selected_year_region = float(selected_year_region)
-            if selected_year_region < 2021.5 or selected_year_region > 2041.5:
-                st.error("Year is out of range. Please select a year between 2021.5 and 2041.5.")
-            else:
-                base_year = 2021.5
-                region_data = df_sdg[df_sdg['Region.Name'] == selected_region]  
-                mortality_prediction_base = region_data[str(base_year)].values[0]
-                decay_factor = 0.95 ** (selected_year_region - base_year)
-                mortality_prediction_region = mortality_prediction_base * decay_factor
-                st.write(f"Predicted Mortality Rate for {selected_region} in {selected_year_region}: {mortality_prediction_region}")
-        except ValueError:
-            st.warning("Please enter a valid year.")
+        if st.button("Predict child mortality"):
+            try:
+                selected_year_region = float(selected_year_region)
+                if selected_year_region < 2021.5 or selected_year_region > 2041.5:
+                    st.error("Year is out of range. Please select a year between 2021.5 and 2041.5.")
+                else:
+                    base_year = 2021.5
+                    region_data = df_sdg[df_sdg['Region.Name'] == selected_region]  
+                    mortality_prediction_base = region_data[str(base_year)].values[0]
+                    decay_factor = 0.95 ** (selected_year_region - base_year)
+                    mortality_prediction_region = mortality_prediction_base * decay_factor
+                    st.write(f"Predicted Mortality Rate for {selected_region} in {selected_year_region}: {mortality_prediction_region}")
+            except ValueError:
+                st.warning("Please enter a valid year.")
+
 if __name__ == "__main__":
     main()
+
+
