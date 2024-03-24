@@ -38,11 +38,11 @@ file_path_country = './country-medium.csv'
 df_country = pd.read_csv(file_path_country, encoding='latin1')
 
 # Read the data from the CSV file for regions
-file_path_region = './Regionss-medium.csv'
+file_path_region = file_path_region = './Regionss-medium.csv'
 df_region = pd.read_csv(file_path_region, encoding='latin1')
 
 # Read the data from the CSV file for sustainable development goals
-file_path_sdg = './SDG-Medium.csv'
+file_path_sdg = './SDG-medium.csv'
 df_sdg = pd.read_csv(file_path_sdg)
 
 # Streamlit app
@@ -102,7 +102,6 @@ def main():
                     st.write(f"Predicted Mortality Rate for {selected_country} in {selected_year_country}: {mortality_prediction_country}")
             except ValueError:
                 st.warning("Please enter a valid year.")
-
     elif selected_data_option == 'By Region':
         # User input for region and year
         selected_region = st.selectbox("Select Region", df_region['Region.Name'].unique())
@@ -146,5 +145,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
